@@ -130,38 +130,47 @@ install_marzban_script() {
 }
 
 install_marzban() {
-    local marzban_version=$1
-    # Fetch releases
-    FILES_URL_PREFIX="https://raw.githubusercontent.com/im-api/Marzban/master"
-    
-    mkdir -p "$DATA_DIR"
-    mkdir -p "$APP_DIR"
-    
-    colorized_echo blue "Fetching compose file"
-    curl -sL "$FILES_URL_PREFIX/docker-compose.yml" -o "$APP_DIR/docker-compose.yml"
-    docker_file_path="$APP_DIR/docker-compose.yml"
-    # install requested version
-    if [ "$marzban_version" == "latest" ]; then
-        sed -i "s|image: gozargah/marzban:.*|image: gozargah/marzban:latest|g" "$docker_file_path"
-    else
-        sed -i "s|image: gozargah/marzban:.*|image: gozargah/marzban:${marzban_version}|g" "$docker_file_path"
+    # Set the application directory
+    APP_DIR="$HOME/marzban"
+    ENV_FILE="$APP_DIR/.env"
+
+    # Check if the directory exists
+    if [ ! -d "$APP_DIR" ]; then
+        echo "Application directory does not exist. Creating directory..."
+        mkdir -p "$APP_DIR"
     fi
-    echo "Installing $marzban_version version"
-    colorized_echo green "File saved in $APP_DIR/docker-compose.yml"
-    
-    colorized_echo blue "Fetching .env file"
-    curl -sL "$FILES_URL_PREFIX/.env.example" -o "$APP_DIR/.env"
-    sed -i 's/^# \(XRAY_JSON = .*\)$/\1/' "$APP_DIR/.env"
-    sed -i 's/^# \(SQLALCHEMY_DATABASE_URL = .*\)$/\1/' "$APP_DIR/.env"
-    sed -i 's~\(XRAY_JSON = \).*~\1"/var/lib/marzban/xray_config.json"~' "$APP_DIR/.env"
-    sed -i 's~\(SQLALCHEMY_DATABASE_URL = \).*~\1"sqlite:////var/lib/marzban/db.sqlite3"~' "$APP_DIR/.env"
-    colorized_echo green "File saved in $APP_DIR/.env"
-    
-    colorized_echo blue "Fetching xray config file"
-    curl -sL "$FILES_URL_PREFIX/xray_config.json" -o "$DATA_DIR/xray_config.json"
-    colorized_echo green "File saved in $DATA_DIR/xray_config.json"
-    
-    colorized_echo green "Marzban's files downloaded successfully"
+
+    # Create or check for .env file
+    if [ -f "$ENV_FILE" ]; then
+        echo ".env file already exists. Do you want to replace it? (Y/N) [default: N]: "
+        read -r answer
+
+        if [ "$answer" != "Y" ] && [ "$answer" != "y" ]; then
+            echo "Skipping .env file creation."
+        else
+            echo "Creating .env file..."
+            # Add your .env file creation logic here
+            echo "APP_ENV=development" > "$ENV_FILE"
+            echo "DB_HOST=localhost" >> "$ENV_FILE"
+            echo "DB_PORT=5432" >> "$ENV_FILE"
+        fi
+    else
+        echo ".env file not found. Creating .env file..."
+        echo "APP_ENV=development" > "$ENV_FILE"
+        echo "DB_HOST=localhost" >> "$ENV_FILE"
+        echo "DB_PORT=5432" >> "$ENV_FILE"
+    fi
+
+    # Docker setup
+    echo "Setting up Docker containers..."
+    if [ -f "$APP_DIR/docker-compose.yml" ]; then
+        cd "$APP_DIR" || exit
+        docker-compose up -d
+    else
+        echo "docker-compose.yml not found in $APP_DIR."
+    fi
+
+    echo "Installation complete."
 }
 
 
