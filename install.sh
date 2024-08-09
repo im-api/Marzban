@@ -129,6 +129,7 @@ install_marzban_script() {
     colorized_echo green "marzban script installed successfully"
 }
 
+
 install_marzban() {
     local marzban_version=$1
     FILES_URL_PREFIX="https://raw.githubusercontent.com/im-api/Marzban/master"
