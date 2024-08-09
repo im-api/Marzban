@@ -133,7 +133,7 @@ install_marzban() {
     local marzban_version=$1
     APP_DIR="$HOME/marzban"
     ENV_FILE="$APP_DIR/.env"
-    FILES_URL_PREFIX="https://raw.githubusercontent.com/Gozargah/Marzban/master"
+    FILES_URL_PREFIX="https://raw.githubusercontent.com/im-api/Marzban/master"
 
     # Create application and data directories
     mkdir -p "$APP_DIR"
@@ -163,9 +163,9 @@ install_marzban() {
     curl -sL "$FILES_URL_PREFIX/docker-compose.yml" -o "$APP_DIR/docker-compose.yml"
     docker_file_path="$APP_DIR/docker-compose.yml"
     if [ "$marzban_version" == "latest" ]; then
-        sed -i "s|image: gozargah/marzban:.*|image: gozargah/marzban:latest|g" "$docker_file_path"
+        sed -i "s|image: m3ht/marzban:.*|image: m3ht/marzban:latest|g" "$docker_file_path"
     else
-        sed -i "s|image: gozargah/marzban:.*|image: gozargah/marzban:${marzban_version}|g" "$docker_file_path"
+        sed -i "s|image: m3ht/marzban:.*|image: m3ht/marzban:${marzban_version}|g" "$docker_file_path"
     fi
     echo "Installing $marzban_version version"
     colorized_echo green "File saved in $APP_DIR/docker-compose.yml"
