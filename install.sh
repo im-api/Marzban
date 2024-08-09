@@ -139,9 +139,10 @@ install_marzban() {
 
     # Create or check for .env file
     if [ -f "$ENV_FILE" ]; then
-        echo ".env file already exists. Do you want to replace it? (Y/N) [default: N]: "
-        read -r answer
-        if [ "$answer" != "Y" ] && [ "$answer" != "y" ]; then
+        read -r -p ".env file already exists. Do you want to replace it? (Y/N) [default: N]: " answer
+        answer=${answer:-N}  # Use default value if no input
+
+        if [ "$answer" != "N" ] && [ "$answer" != "n" ]; then
             echo "Skipping .env file creation."
         else
             echo "Creating .env file..."
