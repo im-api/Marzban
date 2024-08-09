@@ -131,8 +131,6 @@ install_marzban_script() {
 
 install_marzban() {
     local marzban_version=$1
-    APP_DIR="$HOME/marzban"
-    ENV_FILE="$APP_DIR/.env"
     FILES_URL_PREFIX="https://raw.githubusercontent.com/im-api/Marzban/master"
 
     # Create application and data directories
