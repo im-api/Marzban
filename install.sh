@@ -128,7 +128,7 @@ install_marzban_script() {
     curl -sSL $SCRIPT_URL | install -m 755 /dev/stdin /usr/local/bin/marzban
     colorized_echo green "marzban script installed successfully"
 }
-
+ 
 install_marzban() {
     local marzban_version=$1
     FILES_URL_PREFIX="https://raw.githubusercontent.com/im-api/Marzban/master"
