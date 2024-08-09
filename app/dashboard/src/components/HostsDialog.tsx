@@ -272,6 +272,12 @@ const AccordionInbound: FC<AccordionInboundType> = ({
                                 </Text>
                                 <Text mt={1}>
                                   <Badge>
+                                    {"{"}NOTE{"}"}
+                                  </Badge>{" "}
+                                  Shows Note of User
+                                </Text>
+                                <Text mt={1}>
+                                  <Badge>
                                     {"{"}DATA_USAGE{"}"}
                                   </Badge>{" "}
                                   {t("hostsDialog.dataUsage")}
