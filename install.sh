@@ -186,7 +186,6 @@ install_marzban() {
     echo "Setting up Docker containers..."
     if [ -f "$APP_DIR/docker-compose.yml" ]; then
         cd "$APP_DIR" || exit
-        docker-compose up -d
     else
         echo "docker-compose.yml not found in $APP_DIR."
     fi
