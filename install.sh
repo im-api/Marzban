@@ -145,9 +145,19 @@ install_marzban() {
             echo "Skipping .env file creation."
         else
             echo "Creating .env file..."
-            echo "APP_ENV=development" > "$ENV_FILE"
-            echo "DB_HOST=localhost" >> "$ENV_FILE"
-            echo "DB_PORT=5432" >> "$ENV_FILE"
+            # Fetch and update .env file
+            colorized_echo blue "Fetching .env file"
+            curl -sL "$FILES_URL_PREFIX/.env.example" -o "$APP_DIR/.env"
+            sed -i 's/^# \(XRAY_JSON = .*\)$/\1/' "$APP_DIR/.env"
+            sed -i 's/^# \(SQLALCHEMY_DATABASE_URL = .*\)$/\1/' "$APP_DIR/.env"
+            sed -i 's~\(XRAY_JSON = \).*~\1"/var/lib/marzban/xray_config.json"~' "$APP_DIR/.env"
+            sed -i 's~\(SQLALCHEMY_DATABASE_URL = \).*~\1"sqlite:////var/lib/marzban/db.sqlite3"~' "$APP_DIR/.env"
+            colorized_echo green "File saved in $APP_DIR/.env"
+
+            # Fetch xray config file
+            colorized_echo blue "Fetching xray config file"
+            curl -sL "$FILES_URL_PREFIX/xray_config.json" -o "$DATA_DIR/xray_config.json"
+            colorized_echo green "File saved in $DATA_DIR/xray_config.json"
         fi
     else
         echo ".env file not found. Creating .env file..."
@@ -167,20 +177,6 @@ install_marzban() {
     fi
     echo "Installing $marzban_version version"
     colorized_echo green "File saved in $APP_DIR/docker-compose.yml"
-
-    # Fetch and update .env file
-    colorized_echo blue "Fetching .env file"
-    curl -sL "$FILES_URL_PREFIX/.env.example" -o "$APP_DIR/.env"
-    sed -i 's/^# \(XRAY_JSON = .*\)$/\1/' "$APP_DIR/.env"
-    sed -i 's/^# \(SQLALCHEMY_DATABASE_URL = .*\)$/\1/' "$APP_DIR/.env"
-    sed -i 's~\(XRAY_JSON = \).*~\1"/var/lib/marzban/xray_config.json"~' "$APP_DIR/.env"
-    sed -i 's~\(SQLALCHEMY_DATABASE_URL = \).*~\1"sqlite:////var/lib/marzban/db.sqlite3"~' "$APP_DIR/.env"
-    colorized_echo green "File saved in $APP_DIR/.env"
-
-    # Fetch xray config file
-    colorized_echo blue "Fetching xray config file"
-    curl -sL "$FILES_URL_PREFIX/xray_config.json" -o "$DATA_DIR/xray_config.json"
-    colorized_echo green "File saved in $DATA_DIR/xray_config.json"
 
     # Set up Docker containers
     echo "Setting up Docker containers..."
