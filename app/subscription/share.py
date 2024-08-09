@@ -202,6 +202,8 @@ def setup_format_variables(extra_data: dict) -> dict:
     user_status = extra_data.get("status")
     expire_timestamp = extra_data.get("expire")
     on_hold_expire_duration = extra_data.get("on_hold_expire_duration")
+    note = extra_data.get("note")
+
     now = dt.utcnow()
     now_ts = now.timestamp()
 
@@ -264,6 +266,7 @@ def setup_format_variables(extra_data: dict) -> dict:
             "JALALI_EXPIRE_DATE": jalali_expire_date,
             "TIME_LEFT": time_left,
             "STATUS_EMOJI": status_emoji,
+            "NOTE": note,
             "STATUS_TEXT": status_text,
         },
     )
