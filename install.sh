@@ -129,7 +129,6 @@ install_marzban_script() {
     colorized_echo green "marzban script installed successfully"
 }
 
-
 install_marzban() {
     local marzban_version=$1
     FILES_URL_PREFIX="https://raw.githubusercontent.com/im-api/Marzban/master"
@@ -140,10 +139,8 @@ install_marzban() {
 
     # Create or check for .env file
     if [ -f "$ENV_FILE" ]; then
-        read -r -p ".env file already exists. Do you want to replace it? (Y/N) [default: N]: " answer
-        answer=${answer:-N}  # Use default value if no input
-
-        if [ "$answer" != "Y" ] && [ "$answer" != "y" ]; then
+        read -p ".env file already exists. Do you want to replace it? (Y/N) [default: N]: "
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
             echo "Skipping .env file creation."
         else
             echo "Creating .env file..."
