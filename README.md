@@ -1,3 +1,4 @@
+<p align="left"> <img src="https://komarev.com/ghpvc/?username=modified-marzban-master-im-api&label=Page%20Views&color=0e75b6&style=flat" alt="im-api" /> </p>
 <p align="center">
   <a href="https://github.com/gozargah/marzban" target="_blank" rel="noopener noreferrer">
     <picture>
